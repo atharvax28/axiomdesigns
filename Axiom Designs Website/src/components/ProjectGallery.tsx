@@ -67,6 +67,7 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
                         <button
                             onClick={() => setSelectedImageIndex(null)}
                             className="absolute top-8 right-[5vw] text-cream/70 hover:text-cream font-sans tracking-[0.2em] uppercase text-[0.7rem] z-50 transition-colors p-4"
+                            aria-label="Close lightbox gallery"
                         >
                             Close [ESC]
                         </button>

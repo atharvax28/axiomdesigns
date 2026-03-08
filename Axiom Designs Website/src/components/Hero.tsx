@@ -29,6 +29,7 @@ export default function Hero() {
                     className="w-full h-full object-cover opacity-60 scale-105"
                     src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260306_074215_04640ca7-042c-45d6-bb56-58b1e8a42489.mp4"
                     autoPlay loop muted playsInline
+                    aria-hidden="true"
                 />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--color-charcoal)_100%)] opacity-80" />
             </motion.div>

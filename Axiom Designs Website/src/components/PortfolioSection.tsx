@@ -23,7 +23,7 @@ export default function PortfolioSection({ projects }: { projects: ProjectData[]
                             <span className="font-sans font-semibold text-[0.70rem] tracking-[0.25em] uppercase text-gold">Selected Work</span>
                         </FadeIn>
                         <FadeIn delay={0.15}>
-                            <h2 className="mt-4 font-serif font-regular text-[clamp(2.2rem,5vw,4.5rem)] leading-[1.05] tracking-[-0.01em] text-charcoal">
+                            <h2 className="mt-4 font-serif font-normal text-[clamp(2.2rem,5vw,4.5rem)] leading-[1.05] tracking-[-0.01em] text-charcoal">
                                 Our<br /><span className="italic text-gold">Portfolio</span>
                             </h2>
                         </FadeIn>
