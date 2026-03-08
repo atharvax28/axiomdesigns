@@ -1,0 +1,17 @@
+﻿CLIENT   : MR. RISHIKESH SHAH
+LOCATION : Parel, Mumbai
+AREA     : 5,500 sq. ft.
+STYLE    : Contemporary Interior
+───────────────────────────────────────────
+DESCRIPTION
+Large contemporary residence in South-Central Mumbai (Parel).
+Clean lines, modern detailing, and a refined contemporary finish.
+
+PHOTOS
+  photo_01.jpg
+  photo_02.jpg
+  photo_03.jpg
+  photo_04.jpg
+  photo_05.jpg
+  photo_06.jpg
+  photo_07.jpg

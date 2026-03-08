@@ -1,0 +1,14 @@
+﻿CLIENT   : KIA SHOWROOM
+LOCATION : Thane West
+AREA     : 13,000 sq. ft.
+STYLE    : Automotive Showroom
+───────────────────────────────────────────
+DESCRIPTION
+KIA Motors branded showroom in Thane. Large-format retail space with
+vehicle display areas. Brand-compliant KIA design language applied throughout.
+
+PHOTOS
+  photo_01.png
+  photo_02.png
+  photo_03.png
+  photo_04.png

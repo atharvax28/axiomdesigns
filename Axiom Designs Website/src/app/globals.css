@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-cream: #F5F0E8;
+  --color-bone: #EDE6D8;
+  --color-gold: #B8965A;
+  --color-bronze: #8C6A3F;
+  --color-charcoal: #1C1A18;
+  --color-ink: #1E1C1A;
+  --color-muted: #7A7268;
+
+  --font-sans: var(--font-syne), sans-serif;
+  --font-serif: "Helvetica World", Helvetica, Arial, sans-serif;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-ticker {
+  animation: ticker 30s linear infinite;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: var(--color-gold);
+  color: white;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bone);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold);
+  border-radius: 4px;
+}
+
+/* Custom Cursor interactions */
+body.hovering>div>div:first-child {
+  transform: translate(-50%, -50%) scale(1.5) !important;
+  background-color: rgba(184, 150, 90, 0.1) !important;
+}
+
+/* Base Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}

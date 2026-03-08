@@ -1,0 +1,14 @@
+﻿CLIENT   : KOHAR BY KANIKA
+LOCATION : Bandra West, Mumbai
+AREA     : 3,000 sq. ft.
+STYLE    : Jewellery Boutique / Luxury Retail
+───────────────────────────────────────────
+DESCRIPTION
+Luxury jewellery boutique on Bandra West's premium retail corridor.
+Refined display environments with accent lighting and curated finishes.
+
+PHOTOS
+  photo_01.png
+  photo_02.png
+  photo_03.png
+  photo_04.png
