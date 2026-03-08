@@ -39,88 +39,122 @@ const PROJECT_SPECS: Record<string, { client: string, location: string, area: st
 };
 
 export function getProjects(): ProjectData[] {
-    const projectsDir = path.join(process.cwd(), 'public', 'projects');
+    try {
+        const projectsDir = path.join(process.cwd(), 'public', 'projects');
 
-    if (!fs.existsSync(projectsDir)) {
-        return [];
-    }
+        if (!fs.existsSync(projectsDir)) {
+            console.warn('[v0] Projects directory not found at:', projectsDir);
+            return [];
+        }
 
-    const categories = fs.readdirSync(projectsDir).filter(f => fs.statSync(path.join(projectsDir, f)).isDirectory());
-    const projectsList: ProjectData[] = [];
+        const categories = fs.readdirSync(projectsDir).filter(f => {
+            try {
+                return fs.statSync(path.join(projectsDir, f)).isDirectory();
+            } catch {
+                return false;
+            }
+        });
+        const projectsList: ProjectData[] = [];
 
-    categories.forEach(categoryFolder => {
-        // Format category name "01_Residential" -> "Residential"
-        const categoryName = categoryFolder.replace(/^\d+_/, '').replace(/_/g, ' ');
+        categories.forEach(categoryFolder => {
+            try {
+                // Format category name "01_Residential" -> "Residential"
+                const categoryName = categoryFolder.replace(/^\d+_/, '').replace(/_/g, ' ');
 
-        const categoryPath = path.join(projectsDir, categoryFolder);
-        const projectFolders = fs.readdirSync(categoryPath).filter(f => fs.statSync(path.join(categoryPath, f)).isDirectory());
-
-        projectFolders.forEach(projectFolder => {
-            // Format project name "01_Dilip_Bhatia_Grand_Windsor" -> "Dilip Bhatia Grand Windsor"
-            const projectName = projectFolder.replace(/^\d+_/, '').replace(/_/g, ' ');
-
-            const projectPath = path.join(categoryPath, projectFolder);
-            const files = fs.readdirSync(projectPath);
-            const images = files.filter(file => /\.(png|jpe?g|webp)$/i.test(file));
-            images.sort();
-
-            let coverImageFile = "";
-            let largestSize = 0;
-
-            // Find the highest quality (largest size) image for the banner
-            images.forEach(img => {
-                // Avoid using PNGs as covers (usually floor plans)
-                if (img.toLowerCase().endsWith('.png')) return;
-
-                const stats = fs.statSync(path.join(projectPath, img));
-                if (stats.size > largestSize) {
-                    largestSize = stats.size;
-                    coverImageFile = img;
-                }
-            });
-
-            // Fallback logic if no jpegs were found
-            if (!coverImageFile && images.length > 0) {
-                images.forEach(img => {
-                    const stats = fs.statSync(path.join(projectPath, img));
-                    if (stats.size > largestSize) {
-                        largestSize = stats.size;
-                        coverImageFile = img;
+                const categoryPath = path.join(projectsDir, categoryFolder);
+                const projectFolders = fs.readdirSync(categoryPath).filter(f => {
+                    try {
+                        return fs.statSync(path.join(categoryPath, f)).isDirectory();
+                    } catch {
+                        return false;
                     }
                 });
+
+                projectFolders.forEach(projectFolder => {
+                    try {
+                        // Format project name "01_Dilip_Bhatia_Grand_Windsor" -> "Dilip Bhatia Grand Windsor"
+                        const projectName = projectFolder.replace(/^\d+_/, '').replace(/_/g, ' ');
+
+                        const projectPath = path.join(categoryPath, projectFolder);
+                        const files = fs.readdirSync(projectPath);
+                        const images = files.filter(file => /\.(png|jpe?g|webp)$/i.test(file));
+                        images.sort();
+
+                        let coverImageFile = "";
+                        let largestSize = 0;
+
+                        // Find the highest quality (largest size) image for the banner
+                        images.forEach(img => {
+                            // Avoid using PNGs as covers (usually floor plans)
+                            if (img.toLowerCase().endsWith('.png')) return;
+
+                            try {
+                                const stats = fs.statSync(path.join(projectPath, img));
+                                if (stats.size > largestSize) {
+                                    largestSize = stats.size;
+                                    coverImageFile = img;
+                                }
+                            } catch {
+                                // Skip this file if we can't read stats
+                            }
+                        });
+
+                        // Fallback logic if no jpegs were found
+                        if (!coverImageFile && images.length > 0) {
+                            images.forEach(img => {
+                                try {
+                                    const stats = fs.statSync(path.join(projectPath, img));
+                                    if (stats.size > largestSize) {
+                                        largestSize = stats.size;
+                                        coverImageFile = img;
+                                    }
+                                } catch {
+                                    // Skip this file if we can't read stats
+                                }
+                            });
+                        }
+
+                        // Exclude floor planning/autocad design for Manganlal Changanlal
+                        if (projectName === "Manganlal Changanlal Jewellers Indore") {
+                            coverImageFile = images.find(img => img.includes("photo_03")) || images.find(img => img.includes("photo_02")) || coverImageFile;
+                        }
+
+                        if (projectName === "HDFC Securities Mumbai") {
+                            coverImageFile = images.find(img => img.includes("photo_04")) || coverImageFile;
+                        }
+
+                        if (projectName === "KIA Showroom Goa") {
+                            coverImageFile = images.find(img => img.includes("photo_02")) || coverImageFile;
+                        }
+
+                        if (projectName === "KIA Showroom Thane") {
+                            coverImageFile = images.find(img => img.includes("photo_02")) || coverImageFile;
+                        }
+
+                        const specs = PROJECT_SPECS[projectName] || {};
+
+                        projectsList.push({
+                            id: projectFolder,
+                            name: projectName,
+                            category: categoryName,
+                            folderPath: `/projects/${categoryFolder}/${projectFolder}`,
+                            link: `/portfolio/${categoryFolder}/${projectFolder}`,
+                            coverImage: coverImageFile ? `/projects/${categoryFolder}/${projectFolder}/${coverImageFile}` : '',
+                            images: images.map(img => `/projects/${categoryFolder}/${projectFolder}/${img}`),
+                            ...specs
+                        });
+                    } catch (error) {
+                        console.warn(`[v0] Error processing project folder ${projectFolder}:`, error);
+                    }
+                });
+            } catch (error) {
+                console.warn(`[v0] Error processing category ${categoryFolder}:`, error);
             }
-
-            // Exclude floor planning/autocad design for Manganlal Changanlal
-            if (projectName === "Manganlal Changanlal Jewellers Indore") {
-                coverImageFile = images.find(img => img.includes("photo_03")) || images.find(img => img.includes("photo_02")) || coverImageFile;
-            }
-
-            if (projectName === "HDFC Securities Mumbai") {
-                coverImageFile = images.find(img => img.includes("photo_04")) || coverImageFile;
-            }
-
-            if (projectName === "KIA Showroom Goa") {
-                coverImageFile = images.find(img => img.includes("photo_02")) || coverImageFile;
-            }
-
-            if (projectName === "KIA Showroom Thane") {
-                coverImageFile = images.find(img => img.includes("photo_02")) || coverImageFile;
-            }
-
-            const specs = PROJECT_SPECS[projectName] || {};
-
-            projectsList.push({
-                id: projectFolder,
-                name: projectName,
-                category: categoryName,
-                folderPath: `/projects/${categoryFolder}/${projectFolder}`,
-                link: `/portfolio/${categoryFolder}/${projectFolder}`,
-                coverImage: coverImageFile ? `/projects/${categoryFolder}/${projectFolder}/${coverImageFile}` : '',
-                images: images.map(img => `/projects/${categoryFolder}/${projectFolder}/${img}`),
-                ...specs
-            });
         });
-    });
 
-    return projectsList;
+        return projectsList;
+    } catch (error) {
+        console.error('[v0] Error loading projects:', error);
+        return [];
+    }
 }
