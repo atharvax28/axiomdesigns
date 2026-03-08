@@ -32,7 +32,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${playfair.variable} ${syne.variable}`}>
-      <body className="antialiased min-h-screen bg-cream text-ink cursor-none">
+      <body className="antialiased min-h-screen bg-cream text-ink cursor-none" suppressHydrationWarning>
         <ClientLayout>
           <Navbar />
           <main>{children}</main>

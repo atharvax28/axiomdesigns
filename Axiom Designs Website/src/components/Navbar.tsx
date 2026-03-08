@@ -16,10 +16,12 @@ export default function Navbar() {
     useEffect(() => {
         if (isMenuOpen) {
             document.body.style.overflow = 'hidden';
-            if ((window as any).lenis) (window as any).lenis.stop();
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            if ((window as any).__lenis) (window as any).__lenis.stop();
         } else {
             document.body.style.overflow = '';
-            if ((window as any).lenis) (window as any).lenis.start();
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            if ((window as any).__lenis) (window as any).__lenis.start();
         }
     }, [isMenuOpen]);
 

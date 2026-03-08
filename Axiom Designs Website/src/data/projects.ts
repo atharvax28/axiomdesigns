@@ -50,14 +50,14 @@ export function getProjects(): ProjectData[] {
 
     categories.forEach(categoryFolder => {
         // Format category name "01_Residential" -> "Residential"
-        let categoryName = categoryFolder.replace(/^\d+_/, '').replace(/_/g, ' ');
+        const categoryName = categoryFolder.replace(/^\d+_/, '').replace(/_/g, ' ');
 
         const categoryPath = path.join(projectsDir, categoryFolder);
         const projectFolders = fs.readdirSync(categoryPath).filter(f => fs.statSync(path.join(categoryPath, f)).isDirectory());
 
         projectFolders.forEach(projectFolder => {
             // Format project name "01_Dilip_Bhatia_Grand_Windsor" -> "Dilip Bhatia Grand Windsor"
-            let projectName = projectFolder.replace(/^\d+_/, '').replace(/_/g, ' ');
+            const projectName = projectFolder.replace(/^\d+_/, '').replace(/_/g, ' ');
 
             const projectPath = path.join(categoryPath, projectFolder);
             const files = fs.readdirSync(projectPath);

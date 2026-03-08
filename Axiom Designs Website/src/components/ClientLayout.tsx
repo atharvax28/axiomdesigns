@@ -2,10 +2,10 @@
 import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
     const cursorRef = useRef<HTMLDivElement>(null);
+    const lenisRef = useRef<Lenis | null>(null);
     const pathname = usePathname();
 
     useEffect(() => {
@@ -20,14 +20,17 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             touchMultiplier: 2,
         });
 
+        lenisRef.current = lenis;
+
         function raf(time: number) {
             lenis.raf(time);
             requestAnimationFrame(raf);
         }
         requestAnimationFrame(raf);
 
-        // Store lenis instance on window for route change access
-        (window as any).lenis = lenis;
+        // Store lenis instance on window for cross-component access (Navbar)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (window as any).__lenis = lenis;
 
         // Custom cursor movement
         const onMouseMove = (e: MouseEvent) => {
@@ -51,15 +54,17 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
         return () => {
             lenis.destroy();
+            lenisRef.current = null;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            delete (window as any).__lenis;
             window.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseover', handleGlobalHover);
-            delete (window as any).lenis;
         };
     }, []);
 
     useEffect(() => {
-        if ((window as any).lenis) {
-            (window as any).lenis.scrollTo(0, { immediate: true });
+        if (lenisRef.current) {
+            lenisRef.current.scrollTo(0, { immediate: true });
         }
     }, [pathname]);
 

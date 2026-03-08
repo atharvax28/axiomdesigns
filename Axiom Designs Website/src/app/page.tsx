@@ -3,7 +3,6 @@ import ContactForm from '@/components/ContactForm';
 import { FadeIn } from '@/components/FadeIn';
 import { getProjects } from '@/data/projects';
 import PortfolioSection from '@/components/PortfolioSection';
-import Link from 'next/link';
 
 export default function Home() {
   const projects = getProjects();
@@ -49,7 +48,7 @@ export default function Home() {
               </FadeIn>
               <FadeIn delay={0.15}>
                 <blockquote className="font-serif italic text-[clamp(2rem,3.5vw,3rem)] leading-[1.3] text-charcoal mb-12">
-                  "High aesthetic standards, superior quality, cost-efficiency and speedy execution — built purely on word-of-mouth."
+                  &quot;High aesthetic standards, superior quality, cost-efficiency and speedy execution — built purely on word-of-mouth.&quot;
                 </blockquote>
               </FadeIn>
               <FadeIn delay={0.3}>
