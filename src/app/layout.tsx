@@ -4,8 +4,6 @@ import './globals.css';
 import ClientLayout from '@/components/ClientLayout';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { Analytics } from '@vercel/analytics/next';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -38,8 +36,6 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
         </ClientLayout>
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );
