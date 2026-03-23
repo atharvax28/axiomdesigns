@@ -1,12 +1,38 @@
 'use client';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 export default function Hero() {
     const containerRef = useRef(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
     const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end start"] });
     const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
     const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
+    useEffect(() => {
+        const video = videoRef.current;
+
+        if (!video) {
+            return;
+        }
+
+        video.setAttribute('playsinline', 'true');
+        video.setAttribute('webkit-playsinline', 'true');
+        video.muted = true;
+
+        const startVideo = () => {
+            void video.play().catch(() => {
+                // Mobile browsers can still block autoplay until ready; keep the video muted and inline.
+            });
+        };
+
+        startVideo();
+        video.addEventListener('loadedmetadata', startVideo);
+
+        return () => {
+            video.removeEventListener('loadedmetadata', startVideo);
+        };
+    }, []);
 
     const staggerContainer = {
         hidden: { opacity: 0 },
@@ -26,9 +52,18 @@ export default function Hero() {
             {/* Background Video */}
             <motion.div style={{ y, opacity }} className="absolute inset-0 z-0">
                 <video
+                    ref={videoRef}
                     className="w-full h-full object-cover opacity-60 scale-105"
                     src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260306_074215_04640ca7-042c-45d6-bb56-58b1e8a42489.mp4"
-                    autoPlay loop muted playsInline
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="auto"
+                    controls={false}
+                    disablePictureInPicture
+                    disableRemotePlayback
+                    controlsList="nodownload nofullscreen noremoteplayback"
                 />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--color-charcoal)_100%)] opacity-80" />
             </motion.div>
